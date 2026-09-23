@@ -1,0 +1,15 @@
+# Local journals - these are private and should never be committed
+/journals/
+journals/
+*.pdf
+
+# System files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Local environment
+.env
+.env.local

@@ -6,7 +6,7 @@ Own the end-to-end daily journal workflow and enforce sequencing, privacy, and t
 
 ## Inputs
 
-- latest relevant journal PDFs from private Project knowledge;
+- latest relevant journal PDFs from the local `journals/` folder;
 - framework specifications;
 - relevant private memory files.
 

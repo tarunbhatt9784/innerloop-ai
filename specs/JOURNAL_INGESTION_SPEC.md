@@ -17,7 +17,7 @@ After first processing, future InnerLoop runs should use the derived processed-j
 
 # 1. Inputs
 
-Input consists of one or more scanned or image-based PDFs uploaded to Claude Project knowledge.
+Input consists of one or more scanned or image-based PDFs stored in the local `journals/` folder.
 
 Journal formatting is unconstrained.
 

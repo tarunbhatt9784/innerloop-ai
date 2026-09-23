@@ -6,9 +6,10 @@ Create one private Claude Project named `InnerLoop AI - Personal`.
 
 Add to Project knowledge:
 
-- your raw journal PDFs as they are produced;
 - selected files/folders from the public `innerloop-ai` repository;
 - selected files/folders from your private `innerloop-memory` repository.
+
+**Note**: Raw journal PDFs are now kept in the local `journals/` folder. Claude will read them directly from there rather than requiring upload to Project knowledge.
 
 Paste `PROJECT_INSTRUCTIONS.md` into Claude's Project Instructions.
 

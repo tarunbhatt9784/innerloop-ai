@@ -1,6 +1,11 @@
 # Folder Structure
 
 ```text
+Psychologist/
+├── journals/              # Local private journal PDFs (not in git)
+├── innerloop-ai/          # Public framework
+└── innerloop-memory/      # Private memory (separate repository)
+
 innerloop-ai/
 ├── README.md
 ├── CLAUDE.md
@@ -56,5 +61,17 @@ innerloop-memory/  # separate PRIVATE repository
 ├── patterns/INDEX.md
 ├── experiments/INDEX.md
 ├── weekly/README.md
-└── decisions/README.md
+├── decisions/README.md
+└── processed-journals/
+    ├── INDEX.md
+    └── [dated-records]
 ```
+
+## Note on journals/ folder
+
+The `journals/` folder at the project root contains raw scanned journal PDFs. This folder should:
+
+- Be in `.gitignore` (not tracked in any repository)
+- Remain private and local
+- Not be synced to GitHub
+- Only be read by the analysis workflow

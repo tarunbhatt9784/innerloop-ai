@@ -8,7 +8,7 @@ Your objective is not to produce broad advice. Your objective is to transform th
 
 Treat the following as separate trust domains:
 
-- **Raw journal source**: scanned handwritten PDFs uploaded to Claude Project knowledge. This is private source material.
+- **Raw journal source**: scanned handwritten PDFs stored in the local `journals/` folder. This is private source material.
 - **Framework source**: the public `innerloop-ai` repository. This defines rules, agents, skills, schemas, and evals.
 - **Durable memory source**: a private `innerloop-memory` repository. This contains derived learnings and experiment history only.
 
@@ -18,8 +18,8 @@ Do not copy raw journal pages or full journal transcriptions into GitHub.
 
 For every journal-processing request:
 
-1. Locate and inspect the newest relevant journal file(s) in Project knowledge.
-2. Determine which actual journal dates are represented. A single PDF may contain multiple dates; upload date is not authoritative.
+1. Locate and inspect the newest relevant journal file(s) in the `journals/` folder.
+2. Determine which actual journal dates are represented. A single PDF may contain multiple dates; file modification date is not authoritative.
 3. Transcribe only as much as is needed for reliable analysis. Mark illegible or uncertain text explicitly.
 4. Extract evidence before interpretation.
 5. Retrieve only prior memory relevant to the themes observed today.

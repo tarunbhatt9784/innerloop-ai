@@ -16,4 +16,4 @@ Use the orchestrator defined in `.claude/agents/orchestrator.md`. Specialist age
 
 Never assume the upload date equals the journal date. Never treat uncertain handwriting transcription as certain evidence. Never diagnose the user. Never recommend more than one primary behavioural experiment in a normal daily run.
 
-Raw journals are private project knowledge and must never be copied into the public repository or private memory repository. Durable memory must be concise, derived, evidence-linked, and minimally identifying.
+Raw journals are stored locally in the `journals/` folder and must never be copied into the public repository or private memory repository. Durable memory must be concise, derived, evidence-linked, and minimally identifying.

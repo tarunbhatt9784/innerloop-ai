@@ -6,7 +6,7 @@ It is built as an educational, enterprise-style agent architecture: explicit orc
 
 ## What InnerLoop AI does
 
-1. Reads one or more scanned handwritten journal PDFs from Claude Project knowledge.
+1. Reads one or more scanned handwritten journal PDFs from the local `journals/` folder.
 2. Separates transcription uncertainty from interpretation.
 3. Detects the actual journal dates represented in the file, including gaps or multiple days.
 4. Extracts observations, recurring patterns, needs, triggers, coping strategies, strengths, and open questions.
@@ -28,7 +28,7 @@ Use two repositories:
 - `innerloop-ai` — public framework: prompts, specs, agents, skills, schemas, docs, evals.
 - `innerloop-memory` — private personal memory: carefully derived learnings and experiment history.
 
-Raw scanned journals stay inside the user's private Claude Project knowledge. The public repository must never contain raw journal files, direct personal journal transcripts, or secrets.
+Raw scanned journals are stored locally in the `journals/` folder. The public repository must never contain raw journal files, direct personal journal transcripts, or secrets.
 
 ## Repository map
 
