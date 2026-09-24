@@ -9,18 +9,27 @@ The orchestrator owns sequencing, state transitions, tool usage, and final outpu
 ## Runtime flow
 
 ```text
-Claude Project Knowledge (private journal PDFs)
+CloudLocal journals/ folder (private journal PDFs)
+              |
+              v
+  ┌───────────────────────────────────────────┐
+  │ Case Formulator Agent (if prior data)     │
+  │ - Review prior experiment outcome         │
+  │ - Adjust pattern confidence               │
+  │ - Tighten rules                           │
+  │ - Update case formulation                 │
+  └───────────────────────────────────────────┘
               |
               v
        Journal Reader Agent
               |
         Evidence Packet
               v
-      Pattern Analyst Agent <---- relevant private memory only
+      Pattern Analyst Agent <---- current case formulation + relevant memory
               |
-        Working Hypotheses
+        Working Hypotheses (informed by case model)
               v
-  Intervention Designer Agent
+  Intervention Designer Agent (uses tightened rules)
               |
       Candidate Experiments
               v
@@ -33,7 +42,12 @@ Claude Project Knowledge (private journal PDFs)
       Daily Reflection Output
               |
               +----> Memory Curator ----> private innerloop-memory repo
+              |
+              +----> Case Formulator (for next run)
 ```
+
+Note: On first run (no prior experiment), Case Formulator is skipped.
+
 
 ## Why this is not a swarm
 
@@ -58,16 +72,22 @@ The task is highly sequential. Later stages depend on validated outputs from ear
 - Least-privilege retrieval
 - Separation of source data from derived state
 - Failure-mode handling
+- **Progressive case formulation** (adaptive learning from outcomes)
+- **Rule tightening** (system parameters evolve based on user-specific evidence)
+- **Longitudinal pattern tracking** (confidence adjusts across multiple journal entries)
 
 ## State model
 
 A daily run moves through these states:
 
-`DISCOVER -> INGEST -> EVIDENCE_READY -> MEMORY_RETRIEVED -> HYPOTHESES_READY -> CANDIDATES_READY -> SAFETY_REVIEWED -> OUTPUT_READY -> MEMORY_PROPOSED`
+First run: `DISCOVER -> INGEST -> EVIDENCE_READY -> MEMORY_RETRIEVED -> HYPOTHESES_READY -> CANDIDATES_READY -> SAFETY_REVIEWED -> OUTPUT_READY -> MEMORY_PROPOSED`
 
-If source quality is too poor, transition to `NEEDS_CLARIFICATION`.
+Subsequent runs: `OUTCOME_REVIEW -> CASE_FORMULATION_UPDATED -> DISCOVER -> [rest as above]`
 
-If safety escalation is required, transition to `SAFETY_OVERRIDE` and bypass normal experiment selection.
+Possible transitions:
+- If source quality is too poor, transition to `NEEDS_CLARIFICATION`
+- If safety escalation is required, transition to `SAFETY_OVERRIDE` and bypass normal experiment selection
+- If prior experiment outcome is unclear/incomplete, transition to `OUTCOME_ASSESSMENT_NEEDED` (ask user for details)
 
 ## Idempotency
 
