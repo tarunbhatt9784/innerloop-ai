@@ -2,6 +2,10 @@
 /journals/
 journals/
 *.pdf
+*.jpg
+*.jpeg
+*.png
+*.heic
 
 # System files
 .DS_Store

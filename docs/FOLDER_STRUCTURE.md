@@ -69,9 +69,11 @@ innerloop-memory/  # separate PRIVATE repository
 
 ## Note on journals/ folder
 
-The `journals/` folder at the project root contains raw scanned journal PDFs. This folder should:
+The `journals/` folder at the project root contains raw scanned journal PDFs, plus optional mobile-note images (photos of notes made away from the physical journal, named with the same date convention plus a counter suffix for multiples — see `docs/LOCAL_JOURNALS_WORKFLOW.md`). This folder should:
 
 - Be in `.gitignore` (not tracked in any repository)
 - Remain private and local
 - Not be synced to GitHub
 - Only be read by the analysis workflow
+
+When a date has both a PDF and one or more images, they are merged into a single time-ordered entry per `specs/JOURNAL_INGESTION_SPEC.md` Section 29, not treated as separate journal entries.

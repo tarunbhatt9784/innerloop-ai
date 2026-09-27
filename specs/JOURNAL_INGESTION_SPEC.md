@@ -752,3 +752,102 @@ The following invariant overrides weaker chronological assumptions:
 > Printed dates describe the stationery. Handwritten dates describe the journal.
 
 Unless the user explicitly states otherwise, only handwritten dates may establish or change journal-entry date scope.
+
+---
+
+# 29. Multi-Source Journal Entries (PDF + Mobile Note Images)
+
+## 29.1 Purpose
+
+A single journal date may be composed of more than one source file: the
+primary handwritten-diary PDF, plus zero or more mobile-photo images of
+notes written away from the diary (e.g., while out, without the physical
+journal available). This section governs how multiple sources for the
+same journal date are combined into one coherent, time-ordered evidence
+window.
+
+Everything in this spec about trust, privacy, transcription uncertainty,
+and prohibited inference applies equally to mobile-note images. An image
+is not a lower-trust or lower-privacy source than the PDF — it is raw
+source material and must never be copied into GitHub, exactly like the
+PDF.
+
+## 29.2 Source identification
+
+- Mobile-note images use the same filename date convention as PDFs (e.g.,
+  `26 September 2026 (1).jpg`, `26 September 2026 (2).jpg`).
+- Multiple images for the same date are distinguished by a simple counter
+  suffix. The counter is not a time signal and must not be used to infer
+  ordering — it only prevents filename collisions.
+- Journal-date determination for an image follows the same date-authority
+  hierarchy as a PDF (Section 3): a handwritten/written date inside the
+  image content is authoritative; the filename is a source identifier,
+  not proof of date. In practice the filename date and the content will
+  usually agree, but content wins if they conflict.
+- Each image is its own source identifier for processed-journal tracking
+  (Section 11), distinct from the PDF's source identifier, even when they
+  share the same journal date.
+
+## 29.3 Building the day's timeline
+
+For a given journal date, gather every source file associated with that
+date (the PDF, and any images). Within each individual source, preserve
+the order the notes were written/appear in (page order for a PDF; the
+order notes appear within an image).
+
+1. Extract every explicit, written timestamp from every source for that
+   date. These are **anchors** — fixed points in the day's timeline,
+   regardless of which source they came from.
+2. Sort all anchors chronologically to form the backbone of the day's
+   sequence.
+3. For each entry that has no explicit timestamp, place it using its
+   position relative to the nearest anchors *in the order it was
+   written within its own source*:
+   - **Anchor before and after** (e.g., an untimed note appears after an
+     11am entry and before a 2pm entry, in writing order): place it as
+     falling somewhere in that bounded range (between 11am and 2pm). Do
+     not invent a specific time inside the range.
+   - **Anchor after only** (untimed note appears before a known time,
+     with nothing timed before it): place it as before that time (e.g.,
+     "before 2pm").
+   - **Anchor before only** (untimed note appears after a known time,
+     with nothing timed after it anywhere in that source for that date):
+     place it as after that time (e.g., "after 11am"). This is a
+     symmetric extension of the two rules above, inferred rather than
+     explicitly specified by the user — flagged here so it can be
+     corrected if it should behave differently.
+   - **No anchor at all** (an entry, or an entire image, has no
+     timestamp anywhere in it and no relation to a timed entry in its
+     own source): place it at the end of that day's sequence, clearly
+     marked as unspecified/unanchored. Do not guess a time and do not
+     use photo capture metadata (EXIF or similar) to infer one — this
+     spec deliberately does not rely on device metadata for ordering,
+     consistent with the general prohibition on using non-handwritten
+     signals as evidence (Section 2).
+4. Merge the anchored and bounded/ranged entries from all sources into
+   one combined day sequence. Preserve which source each entry came from
+   for provenance; do not blend sources into a single undifferentiated
+   transcription.
+
+## 29.4 Example (from the framework's own design discussion)
+
+- Image note: 10:00am
+- Image note: 10:12am
+- PDF note: 3:00pm
+- Image note: 5:00pm
+
+Combined sequence: 10:00am → 10:12am → 3:00pm → 5:00pm, regardless of
+which file each entry came from or the order the files were opened in.
+
+## 29.5 What this does not change
+
+- Journal-date determination (Section 2-4) is unaffected — this section
+  only governs ordering *within* an already-determined journal date.
+- The "process raw source once, then use the derived record" principle
+  (Section 10) still applies. If a date's PDF was already processed and
+  a new image is added later for that same date, treat this as new,
+  previously-unprocessed source material for an existing journal date:
+  update the existing processed-journal record and re-run the timeline
+  merge (Section 29.3) rather than creating a duplicate record.
+- Minimise-transcription (Section 18) and handwriting-uncertainty
+  (Section 12) rules apply identically to image content.

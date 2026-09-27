@@ -2,15 +2,18 @@
 
 ## Overview
 
-InnerLoop AI now reads journal PDFs directly from the local `journals/` folder instead of requiring upload to Claude Project knowledge.
+InnerLoop AI now reads journal PDFs — and optional mobile-note images — directly from the local `journals/` folder instead of requiring upload to Claude Project knowledge.
 
 ## Folder Structure
 
 ```
 Psychologist/
-├── journals/              # Store your handwritten journal scans here
+├── journals/              # Store your handwritten journal scans and mobile-note photos here
 │   ├── 23 September 2026.pdf
 │   ├── 24 September 2026.pdf
+│   ├── 26 September 2026.pdf
+│   ├── 26 September 2026 (1).jpg   # optional mobile note, same day
+│   ├── 26 September 2026 (2).jpg   # optional second mobile note, same day
 │   └── ...
 ├── innerloop-ai/          # Public framework
 └── innerloop-memory/      # Private memory repository
@@ -25,7 +28,17 @@ Save scanned handwritten journal PDFs to the `journals/` folder.
 **Naming convention** (optional but recommended):
 - Use the journal's handwritten date: `23 September 2026.pdf`
 - Or use any clear naming scheme that you can identify later
-- **Do not rely on filename as the authoritative date** — handwritten dates in the journal take precedence
+- **Do not rely on filename as the authoritative date** — handwritten dates in the journal content take precedence
+
+### 1b. Add Mobile Notes (Optional)
+
+If you jot notes on your phone while out without your journal — a quick photo of a scrap of paper, a note app screenshot, etc. — save it to `journals/` too:
+
+- Name it with the same date as your diary entry, plus a counter if there's more than one that day: `26 September 2026 (1).jpg`, `26 September 2026 (2).jpg`. The counter just avoids filename clashes — it carries no time meaning.
+- **Write a time in the note itself whenever you can** (e.g., "10am", "1012am") — this lets the system slot it precisely into that day's sequence alongside your diary entries.
+- If you don't write a time, that's fine too — the system will place it relative to the nearest timed notes around it (see below), and only puts it at the end of the day, clearly marked as unclear timing, if there's genuinely nothing to anchor it to.
+
+**How ordering works**: all your timed notes for a day — whether from the PDF or from photos — get merged into one single chronological sequence. An untimed note slots into the gap between whichever timed notes come immediately before and after it (in the order you wrote it), not wherever the file happens to sit alphabetically or by upload order. Full detail in `specs/JOURNAL_INGESTION_SPEC.md`, Section 29.
 
 ### 2. Run Journal Analysis
 
@@ -64,7 +77,9 @@ Even with local journals:
 
 ## Important Notes
 
-- The system **does not** rely on PDF filename or file modification date as the journal date
-- The **handwritten date** in the journal content is the source of truth
+- The system **does not** rely on PDF/image filename or file modification date as the journal date
+- The **handwritten/written date** in the journal content is the source of truth
 - If a journal spans multiple handwritten dates, it is split into separate dated entries
 - Journal transcriptions are never persisted — only derived evidence and learnings
+- Mobile-note images are treated as private raw source material, exactly like the PDF — never copied into any repository
+- If you add a mobile-note image for a date that's already been processed (e.g., you journal in the PDF at night, then remember a photo from earlier that day), the system updates the existing record rather than creating a duplicate
