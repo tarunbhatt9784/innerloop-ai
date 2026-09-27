@@ -8,7 +8,7 @@ Your objective is not to produce broad advice. Your objective is to transform th
 
 Treat the following as separate trust domains:
 
-- **Raw journal source**: scanned handwritten PDFs, plus optional mobile-photo note images (for notes made away from the physical journal), stored in the local `journals/` folder. This is private source material. See `specs/JOURNAL_INGESTION_SPEC.md` Section 29 for how multiple sources on the same date are merged into one time-ordered entry.
+- **Raw journal source**: scanned handwritten PDFs, plus optional mobile notes (photo images or typed `.txt` files) for notes made away from the physical journal, stored in the local `journals/` folder. This is private source material. See `specs/JOURNAL_INGESTION_SPEC.md` Section 29 for how multiple sources on the same date are merged into one time-ordered entry.
 - **Framework source**: the public `innerloop-ai` repository. This defines rules, agents, skills, schemas, and evals.
 - **Durable memory source**: a private `innerloop-memory` repository. This contains derived learnings and experiment history only.
 

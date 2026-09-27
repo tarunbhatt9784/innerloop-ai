@@ -755,45 +755,63 @@ Unless the user explicitly states otherwise, only handwritten dates may establis
 
 ---
 
-# 29. Multi-Source Journal Entries (PDF + Mobile Note Images)
+# 29. Multi-Source Journal Entries (PDF + Mobile Note Images + Text Notes)
 
 ## 29.1 Purpose
 
 A single journal date may be composed of more than one source file: the
-primary handwritten-diary PDF, plus zero or more mobile-photo images of
-notes written away from the diary (e.g., while out, without the physical
-journal available). This section governs how multiple sources for the
-same journal date are combined into one coherent, time-ordered evidence
-window.
+primary handwritten-diary PDF, plus zero or more mobile-note files
+capturing notes written away from the diary (e.g., while out, without
+the physical journal available). A mobile note may be either:
 
-Everything in this spec about trust, privacy, transcription uncertainty,
-and prohibited inference applies equally to mobile-note images. An image
-is not a lower-trust or lower-privacy source than the PDF — it is raw
-source material and must never be copied into GitHub, exactly like the
-PDF.
+- an **image** (a photo of something handwritten), or
+- a **text file** (`.txt`) — a typed note, e.g. exported from a phone's
+  notes app.
+
+This section governs how multiple sources for the same journal date,
+in any combination of these three types, are combined into one
+coherent, time-ordered evidence window.
+
+Everything in this spec about trust, privacy, and prohibited inference
+applies equally to every source type. A mobile note — image or text — is
+not a lower-trust or lower-privacy source than the PDF: it is raw source
+material and must never be copied into GitHub, exactly like the PDF.
+
+**Transcription uncertainty is image-specific.** The handwriting-
+uncertainty rules (Section 12: `[uncertain: ...]`, `[illegible]`) exist
+because handwriting can be hard to read — they apply to the PDF and to
+image sources. A `.txt` file is already typed text, so there is nothing
+to transcribe or mis-read. This does not mean a `.txt` note is free of
+ambiguity: shorthand, abbreviations, or unclear meaning can still occur,
+and the ordinary observation-vs-interpretation discipline (Section 16)
+and evidence-extraction rules (Section 14) still apply in full — only
+the handwriting-specific uncertainty markup is inapplicable.
 
 ## 29.2 Source identification
 
-- Mobile-note images use the same filename date convention as PDFs (e.g.,
-  `26 September 2026 (1).jpg`, `26 September 2026 (2).jpg`).
-- Multiple images for the same date are distinguished by a simple counter
-  suffix. The counter is not a time signal and must not be used to infer
-  ordering — it only prevents filename collisions.
-- Journal-date determination for an image follows the same date-authority
-  hierarchy as a PDF (Section 3): a handwritten/written date inside the
-  image content is authoritative; the filename is a source identifier,
-  not proof of date. In practice the filename date and the content will
-  usually agree, but content wins if they conflict.
-- Each image is its own source identifier for processed-journal tracking
-  (Section 11), distinct from the PDF's source identifier, even when they
-  share the same journal date.
+- Mobile-note files (image or text) use the same filename date
+  convention as PDFs, with a simple counter suffix when there is more
+  than one for a date, regardless of type: `26 September 2026 (1).jpg`,
+  `26 September 2026 (2).txt`, `26 September 2026 (3).jpg`. The counter
+  is shared across types — it is just a collision-avoidance index, not a
+  time signal, and must not be used to infer ordering.
+- Journal-date determination for a mobile note follows the same
+  date-authority hierarchy as a PDF (Section 3): a written date inside
+  the note content is authoritative; the filename is a source
+  identifier, not proof of date. In practice the filename date and the
+  content will usually agree, but content wins if they conflict.
+- Each mobile-note file is its own source identifier for processed-
+  journal tracking (Section 11), distinct from the PDF's source
+  identifier and from each other, even when they share the same journal
+  date.
 
 ## 29.3 Building the day's timeline
 
 For a given journal date, gather every source file associated with that
-date (the PDF, and any images). Within each individual source, preserve
-the order the notes were written/appear in (page order for a PDF; the
-order notes appear within an image).
+date (the PDF, and any mobile-note images or text files). Within each
+individual source, preserve the order the notes were written/appear in
+(page order for a PDF; the order notes appear within an image or a text
+file).
 
 1. Extract every explicit, written timestamp from every source for that
    date. These are **anchors** — fixed points in the day's timeline,
@@ -816,14 +834,17 @@ order notes appear within an image).
      symmetric extension of the two rules above, inferred rather than
      explicitly specified by the user — flagged here so it can be
      corrected if it should behave differently.
-   - **No anchor at all** (an entry, or an entire image, has no
-     timestamp anywhere in it and no relation to a timed entry in its
+   - **No anchor at all** (an entry, or an entire mobile-note file, has
+     no timestamp anywhere in it and no relation to a timed entry in its
      own source): place it at the end of that day's sequence, clearly
      marked as unspecified/unanchored. Do not guess a time and do not
-     use photo capture metadata (EXIF or similar) to infer one — this
-     spec deliberately does not rely on device metadata for ordering,
-     consistent with the general prohibition on using non-handwritten
-     signals as evidence (Section 2).
+     use file metadata (photo EXIF, file-creation/modified timestamps,
+     or similar) to infer one — this spec deliberately does not rely on
+     device or filesystem metadata for ordering, consistent with the
+     general prohibition on using non-content signals as evidence
+     (Section 2, Section 9). This applies to `.txt` files exactly as it
+     applies to images: a file's last-modified time is not a substitute
+     for a time written in the note itself.
 4. Merge the anchored and bounded/ranged entries from all sources into
    one combined day sequence. Preserve which source each entry came from
    for provenance; do not blend sources into a single undifferentiated
@@ -834,10 +855,11 @@ order notes appear within an image).
 - Image note: 10:00am
 - Image note: 10:12am
 - PDF note: 3:00pm
-- Image note: 5:00pm
+- Text note: 5:00pm
 
 Combined sequence: 10:00am → 10:12am → 3:00pm → 5:00pm, regardless of
-which file each entry came from or the order the files were opened in.
+which file (or file type) each entry came from, or the order the files
+were opened in.
 
 ## 29.5 What this does not change
 
@@ -845,9 +867,11 @@ which file each entry came from or the order the files were opened in.
   only governs ordering *within* an already-determined journal date.
 - The "process raw source once, then use the derived record" principle
   (Section 10) still applies. If a date's PDF was already processed and
-  a new image is added later for that same date, treat this as new,
-  previously-unprocessed source material for an existing journal date:
-  update the existing processed-journal record and re-run the timeline
-  merge (Section 29.3) rather than creating a duplicate record.
-- Minimise-transcription (Section 18) and handwriting-uncertainty
-  (Section 12) rules apply identically to image content.
+  a new mobile-note file (image or text) is added later for that same
+  date, treat this as new, previously-unprocessed source material for an
+  existing journal date: update the existing processed-journal record
+  and re-run the timeline merge (Section 29.3) rather than creating a
+  duplicate record.
+- Minimise-transcription (Section 18) applies to all source types.
+  Handwriting-uncertainty markup (Section 12) applies to the PDF and to
+  image sources; it does not apply to `.txt` sources, per 29.1.
