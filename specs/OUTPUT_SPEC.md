@@ -1,6 +1,6 @@
 # Daily Output Spec
 
-Use this structure for a normal run.
+Use this structure for a normal run. If the run covers more than one journal date (`JOURNAL_INGESTION_SPEC.md` Section 30), name every date covered near the top of the output and draw "What I noticed" from any of them, but keep everything else — including "The one change to try next" — singular, exactly as in a single-date run.
 
 ## What I noticed
 

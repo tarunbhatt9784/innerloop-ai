@@ -51,3 +51,5 @@ The fallback should normally take under two minutes unless the task itself canno
 ## One-change invariant
 
 Return one primary experiment only. Do not hide multiple behaviour changes inside one recommendation.
+
+This applies per run, not per journal date. When one run's evidence spans multiple journal dates (`JOURNAL_INGESTION_SPEC.md` Section 30), still return exactly one primary experiment for the run as a whole, informed by all dates' evidence together.

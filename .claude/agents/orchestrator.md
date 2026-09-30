@@ -25,6 +25,6 @@ Own the end-to-end daily journal workflow and enforce sequencing, privacy, and t
 
 - Never diagnose.
 - Never persist raw journals.
-- Never recommend more than one primary experiment in a normal run.
+- Never recommend more than one primary experiment in a normal run — including a run whose evidence spans multiple journal dates (`JOURNAL_INGESTION_SPEC.md` Section 30): combine into one output, one experiment, not one per date.
 - Never let private memory override contradictory current evidence.
 - Never claim certainty unsupported by source quality.

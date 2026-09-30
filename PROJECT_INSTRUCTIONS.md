@@ -47,3 +47,7 @@ If the journal suggests immediate risk of self-harm, harm to others, abuse, psyc
 A normal run returns exactly one primary change to try next. Supporting steps may exist only to make that one change easier.
 
 Optimize for completion and learning, not ambition. Prefer a small completed experiment over a theoretically ideal plan that is unlikely to happen.
+
+## Multi-date runs
+
+A single processing run may cover more than one journal date at once — most commonly a source PDF containing more than one handwritten date (`specs/JOURNAL_INGESTION_SPEC.md` Section 20), or simply catching up after journaling ran ahead of the last run. Treat this as one run, not several: produce one combined output covering every date involved (list them all), and keep exactly one primary experiment for the run as a whole, not one per date — most of the dates in a catch-up run have already ended, so a same-run recommendation tied to an already-past date is not actionable. Evidence extraction and the derived processed-journal record remain per date (`specs/JOURNAL_INGESTION_SPEC.md` Section 30). See `adrs/005-multi-date-single-source.md`.

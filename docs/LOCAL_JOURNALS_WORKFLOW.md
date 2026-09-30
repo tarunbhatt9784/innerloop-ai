@@ -84,7 +84,7 @@ Even with local journals:
 
 - The system **does not** rely on filename or file modification date as the journal date, for any source type
 - The **handwritten/written date** in the journal content is the source of truth
-- If a journal spans multiple handwritten dates, it is split into separate dated entries
+- If a journal spans multiple handwritten dates (e.g. you caught up on two days' worth of writing in one sitting), it is split into separate dated entries — each gets its own processed-journal record — but a catch-up run like this still returns one combined reflection and one experiment to try next, not one per day (see `specs/JOURNAL_INGESTION_SPEC.md` Section 30)
 - Journal transcriptions are never persisted — only derived evidence and learnings
 - Mobile notes (photo or `.txt`) are treated as private raw source material, exactly like the PDF — never copied into any repository
 - `.txt` notes are typed, so there's no handwriting-legibility uncertainty to preserve — but ambiguous meaning (shorthand, unclear phrasing) is still handled with the same care as any other source

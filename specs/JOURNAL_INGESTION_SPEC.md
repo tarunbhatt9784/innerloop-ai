@@ -875,3 +875,70 @@ were opened in.
 - Minimise-transcription (Section 18) applies to all source types.
   Handwriting-uncertainty markup (Section 12) applies to the PDF and to
   image sources; it does not apply to `.txt` sources, per 29.1.
+
+---
+
+# 30. Multi-Date Single-Source Processed Records
+
+## 30.1 Purpose
+
+Section 20 governs *detecting* multiple genuine journal dates within one
+source PDF. This section governs what to do *after* detection: how the
+derived processed-journal records, the index, and the run's output
+represent a source that maps to more than one journal date. See
+`adrs/005-multi-date-single-source.md` for the full rationale.
+
+## 30.2 One processed record per journal date
+
+Once Section 20 has split a source into date segments, create one
+processed-journal record per segment, using the same
+`processed-journals/YYYY-MM-DD.md` naming convention as any single-date
+source — never one combined file covering multiple dates. Each record:
+
+- cites the shared source identifier (the filename covering all its
+  dates, e.g. `Journal 29-30 september 2026.pdf`);
+- states its own page range (Section 21);
+- lists any other journal date(s) sharing that source, under a
+  `companion_dates` field, so a future run can find them.
+
+This keeps every processed record addressable the same way every other
+date-indexed reference in the system already works (pattern
+`supporting_dates`, case-formulation dates, experiment-history rows) —
+do not introduce a second, filename-combining convention.
+
+## 30.3 INDEX.md: one row per date
+
+`processed-journals/INDEX.md` gets one row per journal date. A multi-date
+source produces multiple rows that repeat the same Source ID, each with
+its own Journal Date and its own Processed Record path. Do not collapse
+multiple dates into one row's "Journal Date(s)" cell.
+
+## 30.4 One-experiment invariant applies to the run, not to each date
+
+When a single processing run's evidence spans more than one journal date
+(a catch-up run, most commonly because journaling on paper ran ahead of
+the last processing run), produce **one combined daily output** for the
+run, not one output per date. Its `journal_dates` field
+(`schemas/DAILY_OUTPUT_SCHEMA.md`) lists every date covered, its
+"What I noticed" section may draw on evidence from any of them, and it
+carries exactly one `selected_experiment` — the one forward-looking
+recommendation for what to try next (ADR 003 unaffected: exactly one
+primary experiment per run; a multi-date run is still one run).
+
+Do not produce a separate experiment recommendation for each historical
+date. Most dates in a catch-up run have already ended by the time
+processing happens, so a same-run "next experiment" attached to an
+already-past date is not actionable and only fragments the one-change
+invariant it exists to protect.
+
+Evidence extraction, pattern support/contrary-evidence tracking, and
+processed-record creation (30.2-30.3) remain per date — only the output's
+experiment recommendation is combined.
+
+## 30.5 What this does not change
+
+- Section 20's split logic (handwritten evidence only, never printed
+  stationery or filenames) is unaffected.
+- Section 10's re-read policy applies per date: if a future run adds new
+  source material for only one date of a multi-date source (e.g. a mobile
+  note), update only that date's processed record, not its companions.
